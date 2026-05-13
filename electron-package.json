@@ -1,0 +1,32 @@
+{
+  "name": "stardc-manager",
+  "version": "1.0.0",
+  "description": "StarDC Manager - P2P Project & Goal Manager",
+  "main": "electron.js",
+  "scripts": {
+    "start": "electron .",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux",
+    "build-all": "electron-builder --win --mac --linux"
+  },
+  "build": {
+    "appId": "com.stardc.manager",
+    "productName": "StarDC Manager",
+    "files": ["electron.js", "public/**/*"],
+    "win": {
+      "target": "portable",
+      "icon": "public/icon.png"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.0"
+  }
+}
