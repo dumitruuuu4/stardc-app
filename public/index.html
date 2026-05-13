@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#6C3AFF">
+<title>StarDC Manager</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #6C3AFF;
+    --primary-light: #9D6FFF;
+    --accent: #00E5FF;
+    --accent2: #FF3CAC;
+    --green: #00C853;
+    --green-dim: #1B3A26;
+    --dark: #0A0A1A;
+    --dark2: #12122A;
+    --dark3: #1A1A35;
+    --text: #FFFFFF;
+    --text-dim: #8888AA;
+    --danger: #FF4466;
+    --warning: #FFB300;
+  }
+
+  html, body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    height: 100%;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ===== APP LAYOUT ===== */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--dark2);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .app-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .app-logo-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .app-logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .sync-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .sync-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--dark2);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .tab {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab:hover { color: white; }
+
+  /* Content */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== GOALS ===== */
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .add-input {
+    flex: 1;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .add-input:focus { border-color: var(--primary); }
+  .add-input::placeholder { color: var(--text-dim); }
+
+  .btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-accent {
+    background: linear-gradient(135deg, var(--primary), var(--accent2));
+    color: white;
+  }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-danger { background: rgba(255,68,102,0.15); color: var(--danger); }
+  .btn-danger:hover { background: rgba(255,68,102,0.3); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-dim);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+
+  .goal-list { display: flex; flex-direction: column; gap: 8px; }
+  .goal-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 12px 14px;
+    transition: all 0.3s;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .goal-item.completed {
+    opacity: 0.5;
+  }
+  .goal-item.completed .goal-text {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+  .goal-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    background: none;
+    color: transparent;
+    font-size: 12px;
+  }
+  .goal-check.checked {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+  .goal-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .goal-date {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .goal-delete {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color 0.3s;
+  }
+  .goal-delete:hover { color: var(--danger); }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-chip strong { color: var(--accent); }
+
+  /* ===== PROJECTS ===== */
+  .folder-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .folder-bar::-webkit-scrollbar { display: none; }
+  .folder-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+  }
+  .folder-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  .folder-btn:hover { border-color: var(--primary-light); }
+
+  .project-list { display: flex; flex-direction: column; gap: 12px; }
+  .project-card {
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s;
+    animation: slideIn 0.3s ease;
+  }
+  .project-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .project-card-header:hover { background: rgba(255,255,255,0.02); }
+  .project-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .project-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .project-card-body {
+    padding: 0 16px 14px;
+    display: none;
+  }
+  .project-card.open .project-card-body { display: block; }
+  .project-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 12px;
+  }
+  .project-field:last-child { border-bottom: none; }
+  .project-field-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 80px;
+    padding-top: 2px;
+  }
+  .project-field-value {
+    font-size: 14px;
+    text-align: right;
+    word-break: break-word;
+    flex: 1;
+  }
+  .project-field-value a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .project-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .project-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .project-tag {
+    background: rgba(108,58,255,0.12);
+    color: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+  .status-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .status-active { background: rgba(0,200,83,0.15); color: var(--green); }
+  .status-done { background: rgba(0,229,255,0.15); color: var(--accent); }
+  .status-paused { background: rgba(255,179,0,0.15); color: var(--warning); }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.open { display: flex; }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .modal {
+    background: var(--dark2);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px 20px;
+    animation: slideUpModal 0.3s ease;
+  }
+  @keyframes slideUpModal {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+  }
+  .modal-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--primary); }
+  .form-textarea { min-height: 80px; resize: vertical; }
+  .form-select { cursor: pointer; }
+  .form-select option { background: var(--dark2); }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-dim);
+  }
+  .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state-text { font-size: 14px; }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    .modal {
+      border-radius: 20px;
+      margin: auto;
+      max-height: 90vh;
+    }
+    .modal-overlay { align-items: center; }
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-logo">
+      <img src="logo.jpg" alt="" class="app-logo-icon" onerror="this.style.display='none'">
+      <span class="app-logo-text">StarDC</span>
+    </div>
+    <div class="sync-status">
+      <div class="sync-dot"></div>
+      <span id="sync-text">Synced</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('goals')">🎯 Obiective</button>
+    <button class="tab" onclick="switchTab('projects')">💼 Proiecte</button>
+  </div>
+
+  <!-- Goals Tab -->
+  <div class="content">
+    <div class="tab-content active" id="tab-goals">
+      <div class="stats-bar" id="goal-stats"></div>
+      <div class="add-row">
+        <input class="add-input" id="goal-input" placeholder="Adaugă un obiectiv nou..." onkeydown="if(event.key==='Enter') addGoal()">
+        <button class="btn btn-primary" onclick="addGoal()">Adaugă</button>
+      </div>
+      <div class="goal-list" id="goal-list"></div>
+    </div>
+
+    <!-- Projects Tab -->
+    <div class="tab-content" id="tab-projects">
+      <div class="stats-bar" id="project-stats"></div>
+      <div class="add-row">
+        <input class="add-input" id="project-search" placeholder="Caută proiect..." oninput="renderProjects()">
+        <button class="btn btn-accent" onclick="openProjectModal()">+ Proiect</button>
+      </div>
+      <div class="folder-bar" id="folder-bar"></div>
+      <div class="project-list" id="project-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Project Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modal-title-text">Proiect Nou</span>
+      <button class="modal-close" onclick="closeProjectModal()">&times;</button>
+    </div>
+    <input type="hidden" id="edit-project-id">
+    <div class="form-group">
+      <label class="form-label">Nume Proiect *</label>
+      <input class="form-input" id="p-name" placeholder="ex: Restaurant La Mămălică">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Folder</label>
+        <input class="form-input" id="p-folder" placeholder="ex: Websites" list="folder-list">
+        <datalist id="folder-list"></datalist>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="p-status">
+          <option value="active">🟢 Activ</option>
+          <option value="done">🔵 Terminat</option>
+          <option value="paused">🟡 Pauză</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nume Client</label>
+        <input class="form-input" id="p-client" placeholder="ex: Ion Popescu">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefon Client</label>
+        <input class="form-input" id="p-phone" placeholder="ex: 067 123 456" type="tel">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Preț de Vânzare</label>
+        <input class="form-input" id="p-price" placeholder="ex: 1500€">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ore de Lucru</label>
+        <input class="form-input" id="p-hours" placeholder="ex: 40h">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Host / Publicat pe</label>
+      <input class="form-input" id="p-host" placeholder="ex: Render, Hostinger, etc.">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Funcții Implementate</label>
+      <textarea class="form-textarea" id="p-features" placeholder="ex: Design responsive, Chatbot, CMS, Formular contact..."></textarea>
+    </div>
+    <button class="btn btn-accent" style="width:100%; padding: 14px;" onclick="saveProject()">💾 Salvează Proiect</button>
+  </div>
+</div>
+
+<script>
+const API = '';
+let goals = [];
+let projects = [];
+let folders = [];
+let activeFolder = 'all';
+let lastSync = null;
+
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'goals' && i === 0) || (tab === 'projects' && i === 1));
+  });
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+// ===== GOALS =====
+async function loadGoals() {
+  try {
+    const res = await fetch(`${API}/api/goals`);
+    goals = await res.json();
+    renderGoals();
+  } catch(e) { console.error(e); }
+}
+
+function renderGoals() {
+  const total = goals.length;
+  const completed = goals.filter(g => g.completed).length;
+  const pct = total > 0 ? Math.round(completed / total * 100) : 0;
+
+  document.getElementById('goal-stats').innerHTML = `
+    <div class="stat-chip">📊 <strong>${total}</strong> total</div>
+    <div class="stat-chip">✅ <strong>${completed}</strong> terminate</div>
+    <div class="stat-chip">📈 <strong>${pct}%</strong></div>
+  `;
+
+  const list = document.getElementById('goal-list');
+  if (goals.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎯</div><div class="empty-state-text">Niciun obiectiv încă.<br>Adaugă primul!</div></div>`;
+    return;
+  }
+
+  list.innerHTML = goals.map(g => `
+    <div class="goal-item ${g.completed ? 'completed' : ''}">
+      <button class="goal-check ${g.completed ? 'checked' : ''}" onclick="toggleGoal(${g.id}, ${g.completed})">
+        ${g.completed ? '✓' : ''}
+      </button>
+      <span class="goal-text">${escHtml(g.text)}</span>
+      <span class="goal-date">${formatDate(g.created_at)}</span>
+      <button class="goal-delete" onclick="deleteGoal(${g.id})">🗑</button>
+    </div>
+  `).join('');
+}
+
+async function addGoal() {
+  const input = document.getElementById('goal-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  await fetch(`${API}/api/goals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  });
+  loadGoals();
+}
+
+async function toggleGoal(id, completed) {
+  await fetch(`${API}/api/goals/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ completed: completed ? 0 : 1 })
+  });
+  loadGoals();
+}
+
+async function deleteGoal(id) {
+  if (!confirm('Sigur vrei să ștergi?')) return;
+  await fetch(`${API}/api/goals/${id}`, { method: 'DELETE' });
+  loadGoals();
+}
+
+// ===== PROJECTS =====
+async function loadProjects() {
+  try {
+    const [projRes, folderRes] = await Promise.all([
+      fetch(`${API}/api/projects`),
+      fetch(`${API}/api/folders`)
+    ]);
+    projects = await projRes.json();
+    folders = await folderRes.json();
+    renderProjects();
+  } catch(e) { console.error(e); }
+}
+
+function renderProjects() {
+  // Folders
+  const allFolders = ['all', ...folders];
+  document.getElementById('folder-bar').innerHTML = allFolders.map(f => `
+    <button class="folder-btn ${activeFolder === f ? 'active' : ''}" onclick="setFolder('${escAttr(f)}')">
+      ${f === 'all' ? '📋 Toate' : '📁 ' + escHtml(f)}
+    </button>
+  `).join('');
+
+  // Filter
+  const search = document.getElementById('project-search').value.toLowerCase();
+  let filtered = projects;
+  if (activeFolder !== 'all') filtered = filtered.filter(p => p.folder === activeFolder);
+  if (search) filtered = filtered.filter(p =>
+    p.name.toLowerCase().includes(search) ||
+    p.client_name.toLowerCase().includes(search) ||
+    p.folder.toLowerCase().includes(search)
+  );
+
+  // Stats
+  const total = projects.length;
+  const revenue = projects.reduce((sum, p) => {
+    const num = parseFloat((p.sale_price || '').replace(/[^0-9.]/g, ''));
+    return sum + (isNaN(num) ? 0 : num);
+  }, 0);
+  const active = projects.filter(p => p.status === 'active').length;
+  document.getElementById('project-stats').innerHTML = `
+    <div class="stat-chip">💼 <strong>${total}</strong> proiecte</div>
+    <div class="stat-chip">🟢 <strong>${active}</strong> active</div>
+    <div class="stat-chip">💰 <strong>${revenue > 0 ? revenue.toLocaleString() + '€' : '—'}</strong></div>
+  `;
+
+  const list = document.getElementById('project-list');
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💼</div><div class="empty-state-text">${search ? 'Niciun rezultat.' : 'Niciun proiect încă.<br>Adaugă primul!'}</div></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const statusClass = `status-${p.status || 'active'}`;
+    const statusLabel = {active:'Activ', done:'Terminat', paused:'Pauză'}[p.status] || 'Activ';
+    const features = (p.features || '').split('\n').filter(Boolean);
+    return `
+    <div class="project-card" id="pc-${p.id}">
+      <div class="project-card-header" onclick="toggleProjectCard(${p.id})">
+        <div>
+          <div class="project-name">${escHtml(p.name)}</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:2px">📁 ${escHtml(p.folder)} ${p.client_name ? '• ' + escHtml(p.client_name) : ''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+          ${p.sale_price ? `<span class="project-price">${escHtml(p.sale_price)}</span>` : ''}
+        </div>
+      </div>
+      <div class="project-card-body">
+        ${p.client_name ? `<div class="project-field"><span class="project-field-label">👤 Client</span><span class="project-field-value">${escHtml(p.client_name)}</span></div>` : ''}
+        ${p.client_phone ? `<div class="project-field"><span class="project-field-label">📞 Telefon</span><span class="project-field-value"><a href="tel:${p.client_phone}">${escHtml(p.client_phone)}</a></span></div>` : ''}
+        ${p.sale_price ? `<div class="project-field"><span class="project-field-label">💰 Preț</span><span class="project-field-value">${escHtml(p.sale_price)}</span></div>` : ''}
+        ${p.work_hours ? `<div class="project-field"><span class="project-field-label">⏱ Ore</span><span class="project-field-value">${escHtml(p.work_hours)}</span></div>` : ''}
+        ${p.host ? `<div class="project-field"><span class="project-field-label">🌐 Host</span><span class="project-field-value">${escHtml(p.host)}</span></div>` : ''}
+        ${features.length > 0 ? `
+          <div class="project-field">
+            <span class="project-field-label">⚡ Funcții</span>
+            <div class="project-field-value">
+              <div class="project-tags">${features.map(f => `<span class="project-tag">${escHtml(f.trim())}</span>`).join('')}</div>
+            </div>
+          </div>
+        ` : ''}
+        <div class="project-actions">
+          <button class="btn btn-sm btn-ghost" onclick="editProject(${p.id})">✏️ Editează</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteProject(${p.id})">🗑 Șterge</button>
+        </div>
+      </div>
+    </div>
+    `;
+  }).join('');
+}
+
+function toggleProjectCard(id) {
+  document.getElementById(`pc-${id}`).classList.toggle('open');
+}
+
+function setFolder(f) {
+  activeFolder = f;
+  renderProjects();
+}
+
+function openProjectModal(project) {
+  document.getElementById('edit-project-id').value = project ? project.id : '';
+  document.getElementById('modal-title-text').textContent = project ? 'Editează Proiect' : 'Proiect Nou';
+  document.getElementById('p-name').value = project ? project.name : '';
+  document.getElementById('p-folder').value = project ? project.folder : '';
+  document.getElementById('p-status').value = project ? project.status : 'active';
+  document.getElementById('p-client').value = project ? project.client_name : '';
+  document.getElementById('p-phone').value = project ? project.client_phone : '';
+  document.getElementById('p-price').value = project ? project.sale_price : '';
+  document.getElementById('p-hours').value = project ? project.work_hours : '';
+  document.getElementById('p-host').value = project ? project.host : '';
+  document.getElementById('p-features').value = project ? project.features : '';
+
+  // Update folder datalist
+  document.getElementById('folder-list').innerHTML = folders.map(f => `<option value="${escAttr(f)}">`).join('');
+
+  document.getElementById('project-modal').classList.add('open');
+}
+
+function closeProjectModal() {
+  document.getElementById('project-modal').classList.remove('open');
+}
+
+function editProject(id) {
+  const p = projects.find(x => x.id === id);
+  if (p) openProjectModal(p);
+}
+
+async function saveProject() {
+  const id = document.getElementById('edit-project-id').value;
+  const data = {
+    name: document.getElementById('p-name').value.trim(),
+    folder: document.getElementById('p-folder').value.trim() || 'General',
+    status: document.getElementById('p-status').value,
+    client_name: document.getElementById('p-client').value.trim(),
+    client_phone: document.getElementById('p-phone').value.trim(),
+    sale_price: document.getElementById('p-price').value.trim(),
+    work_hours: document.getElementById('p-hours').value.trim(),
+    host: document.getElementById('p-host').value.trim(),
+    features: document.getElementById('p-features').value.trim(),
+  };
+
+  if (!data.name) return alert('Numele e obligatoriu!');
+
+  if (id) {
+    await fetch(`${API}/api/projects/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } else {
+    await fetch(`${API}/api/projects`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  }
+  closeProjectModal();
+  loadProjects();
+}
+
+async function deleteProject(id) {
+  if (!confirm('Sigur vrei să ștergi proiectul?')) return;
+  await fetch(`${API}/api/projects/${id}`, { method: 'DELETE' });
+  loadProjects();
+}
+
+// ===== SYNC (5s polling) =====
+async function checkSync() {
+  try {
+    const res = await fetch(`${API}/api/sync`);
+    const data = await res.json();
+    if (lastSync && data.last_update !== lastSync) {
+      document.getElementById('sync-text').textContent = 'Syncing...';
+      await Promise.all([loadGoals(), loadProjects()]);
+      document.getElementById('sync-text').textContent = 'Synced';
+    }
+    lastSync = data.last_update;
+  } catch(e) {
+    document.getElementById('sync-text').textContent = 'Offline';
+  }
+}
+
+// ===== HELPERS =====
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+function escAttr(str) { return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+function formatDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'Z');
+  return dt.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' });
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+// ===== INIT =====
+loadGoals();
+loadProjects();
+setInterval(checkSync, 5000);
+
+// Close modal on overlay click
+document.getElementById('project-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeProjectModal();
+});
+</script>
+</body>
+</html>
