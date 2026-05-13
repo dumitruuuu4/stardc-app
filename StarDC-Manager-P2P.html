@@ -37,12 +37,9 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   .header-right { display: flex; align-items: center; gap: 12px; }
-  .sync-status {
-    display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim);
-  }
+  .sync-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); }
   .sync-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
+    width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s ease-in-out infinite;
   }
   .sync-dot.online { background: var(--green); }
   .sync-dot.offline { background: var(--danger); animation: none; }
@@ -52,13 +49,6 @@
     background: rgba(108,58,255,0.2); color: var(--primary-light);
     padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
   }
-  .btn-icon {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    color: var(--text-dim); width: 34px; height: 34px; border-radius: 10px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; transition: all 0.3s;
-  }
-  .btn-icon:hover { background: rgba(108,58,255,0.2); color: white; }
 
   .tabs {
     display: flex; background: var(--dark2);
@@ -76,33 +66,29 @@
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  /* Connect Panel */
-  .connect-panel {
+  /* Panels */
+  .panel {
     background: var(--dark3); border: 1px solid rgba(255,255,255,0.08);
     border-radius: 14px; padding: 20px; margin-bottom: 16px;
   }
-  .connect-title {
+  .panel-title {
     font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700;
     margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
   }
+
+  /* Connect */
   .connect-row { display: flex; gap: 8px; margin-bottom: 10px; }
   .room-input {
     flex: 1; background: var(--dark); border: 1px solid rgba(255,255,255,0.1);
     border-radius: 10px; padding: 10px 14px; color: white; font-size: 14px;
-    font-family: 'Space Grotesk', monospace; outline: none; text-transform: uppercase;
-    letter-spacing: 2px;
+    font-family: 'Space Grotesk', monospace; outline: none; text-transform: uppercase; letter-spacing: 2px;
   }
   .room-input:focus { border-color: var(--primary); }
   .room-input::placeholder { color: var(--text-dim); letter-spacing: 1px; text-transform: none; }
   .connect-info { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
   .connect-info strong { color: var(--accent); }
-  .connected-peers {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
-  }
-  .peer-badge {
-    background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.2);
-    color: var(--green); padding: 4px 10px; border-radius: 12px; font-size: 11px;
-  }
+  .connected-peers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .peer-badge { background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.2); color: var(--green); padding: 4px 10px; border-radius: 12px; font-size: 11px; }
 
   /* Forms */
   .add-row { display: flex; gap: 8px; margin-bottom: 16px; }
@@ -125,8 +111,6 @@
   .btn-danger:hover { background: rgba(255,68,102,0.3); }
   .btn-ghost { background: rgba(255,255,255,0.05); color: var(--text-dim); }
   .btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
-  .btn-success { background: rgba(0,200,83,0.15); color: var(--green); }
-  .btn-success:hover { background: rgba(0,200,83,0.3); }
 
   /* Goals */
   .stats-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -199,6 +183,36 @@
   .status-done { background: rgba(0,229,255,0.15); color: var(--accent); }
   .status-paused { background: rgba(255,179,0,0.15); color: var(--warning); }
 
+  /* Files */
+  .file-upload-zone {
+    border: 2px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 30px;
+    text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 16px;
+  }
+  .file-upload-zone:hover { border-color: var(--primary); background: rgba(108,58,255,0.05); }
+  .file-upload-zone.dragover { border-color: var(--accent); background: rgba(0,229,255,0.05); }
+  .file-upload-icon { font-size: 36px; margin-bottom: 8px; }
+  .file-upload-text { color: var(--text-dim); font-size: 14px; }
+  .file-upload-text strong { color: var(--accent); }
+
+  .file-list { display: flex; flex-direction: column; gap: 8px; }
+  .file-item {
+    display: flex; align-items: center; gap: 12px; background: var(--dark3);
+    border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 14px;
+    animation: slideIn 0.3s ease;
+  }
+  .file-icon { font-size: 28px; flex-shrink: 0; }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .file-progress {
+    width: 100%; height: 4px; background: rgba(255,255,255,0.06);
+    border-radius: 2px; margin-top: 6px; overflow: hidden;
+  }
+  .file-progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 2px; transition: width 0.3s;
+  }
+
   /* Modal */
   .modal-overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -250,13 +264,13 @@
         <div class="sync-dot waiting" id="sync-dot"></div>
         <span id="sync-text">Deconectat</span>
       </div>
-      <button class="btn-icon" onclick="switchTab('connect')" title="Conexiune">🔗</button>
     </div>
   </div>
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('goals')">🎯 Obiective</button>
     <button class="tab" onclick="switchTab('projects')">💼 Proiecte</button>
+    <button class="tab" onclick="switchTab('files')">📁 Fișiere</button>
     <button class="tab" onclick="switchTab('connect')">🔗 Conectare</button>
   </div>
 
@@ -282,30 +296,46 @@
       <div class="project-list" id="project-list"></div>
     </div>
 
+    <!-- Files -->
+    <div class="tab-content" id="tab-files">
+      <div class="panel">
+        <div class="panel-title">📂 Transfer Fișiere P2P</div>
+        <div class="file-upload-zone" id="file-drop-zone" onclick="document.getElementById('file-input').click()">
+          <div class="file-upload-icon">📤</div>
+          <div class="file-upload-text">Click sau <strong>trage fișiere</strong> aici<br><span style="font-size:12px">Max 100MB per fișier • Trimise direct P2P</span></div>
+        </div>
+        <input type="file" id="file-input" multiple style="display:none" onchange="handleFiles(this.files)">
+        <div class="file-list" id="file-list"></div>
+        <div class="empty-state" id="files-empty">
+          <div class="empty-state-icon">📁</div>
+          <div style="font-size:14px">Niciun fișier transferat încă.<br>Adaugă fișiere pentru a le trimite prietenilor conectați.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Connect -->
     <div class="tab-content" id="tab-connect">
-      <div class="connect-panel">
-        <div class="connect-title">🔗 Conectare P2P</div>
+      <div class="panel">
+        <div class="panel-title">🔗 Conectare P2P</div>
         <div class="connect-row">
-          <input class="room-input" id="room-input" placeholder="Introdu codul camerei..." maxlength="30">
+          <input class="room-input" id="room-input" placeholder="Codul camerei (ex: STARDC-TEAM)" maxlength="30">
           <button class="btn btn-accent" onclick="connectToRoom()">Conectează-te</button>
         </div>
         <div class="connect-info">
           <strong>Cum funcționează:</strong><br>
-          1. Creează sau introdu un <strong>cod de cameră</strong> (ex: STARDC-TEAM)<br>
-          2. Trimite codul prietenului tău<br>
-          3. Amândoi folosiți același cod → <strong>sync live P2P!</strong><br><br>
-          <strong>⚠️ Amândoi trebuie să folosiți exact același cod!</strong>
+          1. Creează sau introdu un <strong>cod de cameră</strong><br>
+          2. Trimite codul prietenului<br>
+          3. Amândoi folosiți același cod → <strong>sync live P2P + transfer fișiere!</strong>
         </div>
       </div>
-      <div class="connect-panel">
-        <div class="connect-title">👥 Dispozitive conectate</div>
+      <div class="panel">
+        <div class="panel-title">👥 Dispozitive conectate</div>
         <div class="connected-peers" id="connected-peers">
           <span style="color:var(--text-dim);font-size:13px">Niciun dispozitiv conectat</span>
         </div>
       </div>
-      <div class="connect-panel">
-        <div class="connect-title">📋 Codul tău de cameră</div>
+      <div class="panel">
+        <div class="panel-title">📋 Codul camerei</div>
         <div style="display:flex;gap:8px;align-items:center">
           <code id="my-room-code" style="flex:1;background:var(--dark);padding:12px 16px;border-radius:10px;font-size:18px;letter-spacing:3px;color:var(--accent);text-align:center;font-family:'Space Grotesk',monospace">—</code>
           <button class="btn btn-sm btn-ghost" onclick="copyRoomCode()">📋 Copiază</button>
@@ -381,7 +411,6 @@ let data = loadData();
 let currentRoom = null;
 let peer = null;
 let connections = {};
-let connCounter = 0;
 let activeFolder = 'all';
 
 function loadData() {
@@ -390,61 +419,47 @@ function loadData() {
 }
 function saveLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 
-// ===== P2P =====
+// ===== P2P CONNECTION =====
+const CHUNK_SIZE = 16 * 1024; // 16KB chunks for reliable transfer
+const pendingFiles = {}; // Track incoming file transfers
+
 function connectToRoom() {
   const room = document.getElementById('room-input').value.trim().toUpperCase();
   if (!room) return alert('Introdu un cod de cameră!');
-  if (peer) { peer.destroy(); }
+  if (peer) peer.destroy();
   connections = {};
   currentRoom = room;
   updatePeerUI();
 
-  // Peer ID = room code + random suffix
   const peerId = 'stardc-' + room + '-' + Math.random().toString(36).substr(2, 6);
   peer = new Peer(peerId);
 
   peer.on('open', (id) => {
-    console.log('Peer open:', id);
-    updateStatus('online', 'Căutare...');
+    updateStatus('waiting', 'Căutare...');
     document.getElementById('my-room-code').textContent = room;
     localStorage.setItem('stardc_room', room);
 
-    // Discover existing peers via list
     peer.listAllPeers((peers) => {
       peers.forEach(pid => {
-        if (pid.startsWith('stardc-' + room + '-') && pid !== id) {
-          connectToPeer(pid);
-        }
+        if (pid.startsWith('stardc-' + room + '-') && pid !== id) connectToPeer(pid);
       });
     });
   });
 
-  peer.on('connection', (conn) => {
-    setupConnection(conn);
-  });
+  peer.on('connection', (conn) => setupConnection(conn));
 
   peer.on('error', (err) => {
-    console.error('Peer error:', err);
-    if (err.type === 'unavailable-id') {
-      // ID taken, retry with different suffix
-      setTimeout(() => connectToRoom(), 500);
-    } else {
-      updateStatus('offline', 'Eroare');
-    }
+    if (err.type === 'unavailable-id') setTimeout(() => connectToRoom(), 500);
+    else updateStatus('offline', 'Eroare');
   });
 
-  peer.on('disconnected', () => {
-    updateStatus('offline', 'Deconectat');
-  });
+  peer.on('disconnected', () => updateStatus('offline', 'Deconectat'));
 
-  // Re-discover every 10s
   setInterval(() => {
     if (peer && !peer.destroyed) {
       peer.listAllPeers((peers) => {
         peers.forEach(pid => {
-          if (pid.startsWith('stardc-' + room + '-') && pid !== peer.id && !connections[pid]) {
-            connectToPeer(pid);
-          }
+          if (pid.startsWith('stardc-' + room + '-') && pid !== peer.id && !connections[pid]) connectToPeer(pid);
         });
       });
     }
@@ -461,63 +476,67 @@ function setupConnection(conn) {
   conn.on('open', () => {
     connections[conn.peer] = conn;
     updatePeerUI();
-    // Send our current data to new peer
     conn.send({ type: 'sync-full', data: data, sender: peer.id });
   });
 
-  conn.on('data', (msg) => {
-    handleP2PMessage(msg);
-  });
+  conn.on('data', (msg) => handleP2PMessage(msg, conn));
 
-  conn.on('close', () => {
-    delete connections[conn.peer];
-    updatePeerUI();
-  });
-
-  conn.on('error', () => {
-    delete connections[conn.peer];
-    updatePeerUI();
-  });
+  conn.on('close', () => { delete connections[conn.peer]; updatePeerUI(); });
+  conn.on('error', () => { delete connections[conn.peer]; updatePeerUI(); });
 }
 
-function handleP2PMessage(msg) {
+function handleP2PMessage(msg, conn) {
   if (msg.type === 'sync-full') {
-    // Merge: keep newer items
-    const remoteData = msg.data;
-    mergeData(remoteData);
-    renderGoals();
-    renderProjects();
+    mergeData(msg.data);
+    renderGoals(); renderProjects();
   } else if (msg.type === 'update') {
-    // Apply single update
     applyUpdate(msg.update);
-    renderGoals();
-    renderProjects();
+    renderGoals(); renderProjects();
+  } else if (msg.type === 'file-meta') {
+    // Start receiving file
+    const meta = msg;
+    pendingFiles[meta.fileId] = {
+      name: meta.name,
+      size: meta.size,
+      type: meta.type,
+      chunks: [],
+      received: 0
+    };
+    addFileToList(meta.fileId, meta.name, meta.size, 0, 'receiving');
+  } else if (msg.type === 'file-chunk') {
+    const pf = pendingFiles[msg.fileId];
+    if (!pf) return;
+    pf.chunks.push(msg.chunk);
+    pf.received += msg.chunk.byteLength;
+    const pct = Math.round(pf.received / pf.size * 100);
+    updateFileProgress(msg.fileId, pct);
+    if (pf.received >= pf.size) {
+      // File complete - create blob for download
+      const blob = new Blob(pf.chunks, { type: pf.type });
+      const url = URL.createObjectURL(blob);
+      finalizeFile(msg.fileId, pf.name, url, pf.size);
+      delete pendingFiles[msg.fileId];
+    }
   }
 }
 
 function mergeData(remote) {
-  // Merge goals by ID
   remote.goals.forEach(rg => {
     const idx = data.goals.findIndex(g => g.id === rg.id);
-    if (idx < 0) {
-      data.goals.push(rg);
-    } else {
-      const local = data.goals[idx];
-      const lTime = new Date(local.updated_at || local.created_at || 0).getTime();
-      const rTime = new Date(rg.updated_at || rg.created_at || 0).getTime();
-      if (rTime > lTime) data.goals[idx] = rg;
+    if (idx < 0) data.goals.push(rg);
+    else {
+      const lt = new Date(data.goals[idx].updated_at || data.goals[idx].created_at || 0).getTime();
+      const rt = new Date(rg.updated_at || rg.created_at || 0).getTime();
+      if (rt > lt) data.goals[idx] = rg;
     }
   });
-  // Merge projects by ID
   remote.projects.forEach(rp => {
     const idx = data.projects.findIndex(p => p.id === rp.id);
-    if (idx < 0) {
-      data.projects.push(rp);
-    } else {
-      const local = data.projects[idx];
-      const lTime = new Date(local.updated_at || local.created_at || 0).getTime();
-      const rTime = new Date(rp.updated_at || rp.created_at || 0).getTime();
-      if (rTime > lTime) data.projects[idx] = rp;
+    if (idx < 0) data.projects.push(rp);
+    else {
+      const lt = new Date(data.projects[idx].updated_at || data.projects[idx].created_at || 0).getTime();
+      const rt = new Date(rp.updated_at || rp.created_at || 0).getTime();
+      if (rt > lt) data.projects[idx] = rp;
     }
   });
   saveLocal();
@@ -540,34 +559,22 @@ function applyUpdate(update) {
 
 function broadcastUpdate(collection, action, item) {
   const msg = { type: 'update', update: { collection, action, item } };
-  Object.values(connections).forEach(conn => {
-    try { conn.send(msg); } catch(e) {}
-  });
+  Object.values(connections).forEach(conn => { try { conn.send(msg); } catch(e) {} });
 }
 
 function updateStatus(state, text) {
-  const dot = document.getElementById('sync-dot');
-  dot.className = 'sync-dot ' + state;
+  document.getElementById('sync-dot').className = 'sync-dot ' + state;
   document.getElementById('sync-text').textContent = text;
 }
 
 function updatePeerUI() {
   const count = Object.keys(connections).length;
   document.getElementById('peer-count').textContent = count + ' conectat' + (count === 1 ? '' : 'ți');
-  if (count > 0) {
-    updateStatus('online', 'Sync activ');
-  } else if (peer && peer.open) {
-    updateStatus('waiting', 'Așteptare...');
-  }
-
+  if (count > 0) updateStatus('online', 'Sync activ');
+  else if (peer && peer.open) updateStatus('waiting', 'Așteptare...');
   const peersDiv = document.getElementById('connected-peers');
-  if (count === 0) {
-    peersDiv.innerHTML = '<span style="color:var(--text-dim);font-size:13px">Niciun dispozitiv conectat</span>';
-  } else {
-    peersDiv.innerHTML = Object.keys(connections).map((pid, i) =>
-      `<span class="peer-badge">💻 Dispozitiv ${i + 1}</span>`
-    ).join('');
-  }
+  if (count === 0) peersDiv.innerHTML = '<span style="color:var(--text-dim);font-size:13px">Niciun dispozitiv conectat</span>';
+  else peersDiv.innerHTML = Object.keys(connections).map((_, i) => `<span class="peer-badge">💻 Dispozitiv ${i+1}</span>`).join('');
 }
 
 function copyRoomCode() {
@@ -576,12 +583,128 @@ function copyRoomCode() {
   navigator.clipboard.writeText(code).then(() => alert('Cod copiat! Trimite-l prietenului: ' + code));
 }
 
+// ===== FILE TRANSFER =====
+function handleFiles(fileList) {
+  for (const file of fileList) {
+    if (file.size > 100 * 1024 * 1024) { alert(file.name + ' e prea mare (max 100MB)'); continue; }
+    sendFile(file);
+  }
+  document.getElementById('file-input').value = '';
+}
+
+async function sendFile(file) {
+  const fileId = Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+  const connKeys = Object.keys(connections);
+  if (connKeys.length === 0) {
+    alert('Niciun prieten conectat! Conectați-vă mai întâi.');
+    return;
+  }
+
+  // Add to list as sending
+  addFileToList(fileId, file.name, file.size, 0, 'sending');
+
+  // Send metadata
+  const meta = { type: 'file-meta', fileId, name: file.name, size: file.size, fileType: file.type };
+  connKeys.forEach(k => { try { connections[k].send(meta); } catch(e) {} });
+
+  // Read and send in chunks
+  const buffer = await file.arrayBuffer();
+  let offset = 0;
+
+  function sendChunk() {
+    if (offset >= buffer.byteLength) return;
+    const end = Math.min(offset + CHUNK_SIZE, buffer.byteLength);
+    const chunk = buffer.slice(offset, end);
+
+    connKeys.forEach(k => {
+      try {
+        connections[k].send({ type: 'file-chunk', fileId, chunk });
+      } catch(e) {}
+    });
+
+    offset = end;
+    const pct = Math.round(offset / buffer.byteLength * 100);
+    updateFileProgress(fileId, pct);
+
+    // Small delay to avoid flooding
+    setTimeout(sendChunk, 5);
+  }
+  sendChunk();
+}
+
+function addFileToList(fileId, name, size, pct, state) {
+  document.getElementById('files-empty').style.display = 'none';
+  const icon = getFileIcon(name);
+  const sizeStr = formatSize(size);
+  const list = document.getElementById('file-list');
+  const div = document.createElement('div');
+  div.className = 'file-item';
+  div.id = 'file-' + fileId;
+  div.innerHTML = `
+    <div class="file-icon">${icon}</div>
+    <div class="file-info">
+      <div class="file-name">${esc(name)}</div>
+      <div class="file-meta">${sizeStr} • ${state === 'sending' ? '📤 Se trimite' : '📥 Se primește'}</div>
+      <div class="file-progress"><div class="file-progress-bar" id="prog-${fileId}" style="width:${pct}%"></div></div>
+    </div>
+  `;
+  list.prepend(div);
+}
+
+function updateFileProgress(fileId, pct) {
+  const bar = document.getElementById('prog-' + fileId);
+  if (bar) bar.style.width = pct + '%';
+}
+
+function finalizeFile(fileId, name, url, size) {
+  const el = document.getElementById('file-' + fileId);
+  if (!el) return;
+  const icon = getFileIcon(name);
+  const sizeStr = formatSize(size);
+  el.innerHTML = `
+    <div class="file-icon">${icon}</div>
+    <div class="file-info">
+      <div class="file-name">${esc(name)}</div>
+      <div class="file-meta">${sizeStr} • ✅ Primit</div>
+    </div>
+    <a href="${url}" download="${esc(name)}" class="btn btn-sm btn-primary" style="text-decoration:none">💾 Salvează</a>
+  `;
+}
+
+function getFileIcon(name) {
+  const ext = (name || '').split('.').pop().toLowerCase();
+  const map = {
+    pdf: '📄', doc: '📝', docx: '📝', xls: '📊', xlsx: '📊', ppt: '📊', pptx: '📊',
+    jpg: '🖼', jpeg: '🖼', png: '🖼', gif: '🖼', svg: '🖼', webp: '🖼', psd: '🎨',
+    mp4: '🎬', avi: '🎬', mov: '🎬', mkv: '🎬',
+    mp3: '🎵', wav: '🎵', flac: '🎵',
+    zip: '📦', rar: '📦', '7z': '📦', tar: '📦', gz: '📦',
+    js: '💻', html: '🌐', css: '🎨', py: '🐍', json: '📋',
+    txt: '📝', csv: '📊', sql: '🗄'
+  };
+  return map[ext] || '📎';
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// Drag & Drop
+const dropZone = document.getElementById('file-drop-zone');
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+
 // ===== TABS =====
 function switchTab(tab) {
   const tabs = document.querySelectorAll('.tab');
-  tabs[0].classList.toggle('active', tab === 'goals');
-  tabs[1].classList.toggle('active', tab === 'projects');
-  tabs[2].classList.toggle('active', tab === 'connect');
+  const map = { goals: 0, projects: 1, files: 2, connect: 3 };
+  tabs.forEach((t, i) => t.classList.toggle('active', i === map[tab]));
   document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
   document.getElementById(`tab-${tab}`).classList.add('active');
 }
@@ -614,31 +737,24 @@ function renderGoals() {
 }
 
 function addGoal() {
-  const inp = document.getElementById('goal-input');
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value = '';
+  const inp = document.getElementById('goal-input'); const text = inp.value.trim();
+  if (!text) return; inp.value = '';
   const item = { id: Date.now(), text, completed: false, created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
-  data.goals.push(item);
-  saveLocal(); renderGoals();
+  data.goals.push(item); saveLocal(); renderGoals();
   broadcastUpdate('goals', 'add', item);
 }
 
 function toggleGoal(id) {
-  const g = data.goals.find(x => x.id === id);
-  if (!g) return;
-  g.completed = !g.completed;
-  g.completed_at = g.completed ? new Date().toISOString() : null;
-  g.updated_at = new Date().toISOString();
-  saveLocal(); renderGoals();
+  const g = data.goals.find(x => x.id === id); if (!g) return;
+  g.completed = !g.completed; g.completed_at = g.completed ? new Date().toISOString() : null;
+  g.updated_at = new Date().toISOString(); saveLocal(); renderGoals();
   broadcastUpdate('goals', 'update', g);
 }
 
 function deleteGoal(id) {
   if (!confirm('Sigur vrei să ștergi?')) return;
   const item = data.goals.find(x => x.id === id);
-  data.goals = data.goals.filter(x => x.id !== id);
-  saveLocal(); renderGoals();
+  data.goals = data.goals.filter(x => x.id !== id); saveLocal(); renderGoals();
   if (item) broadcastUpdate('goals', 'delete', item);
 }
 
@@ -709,7 +825,6 @@ function openProjectModal(p) {
   document.getElementById('project-modal').classList.add('open');
 }
 function closeProjectModal() { document.getElementById('project-modal').classList.remove('open'); }
-
 function editProject(id) { const p = data.projects.find(x => x.id === id); if (p) openProjectModal(p); }
 
 function saveProject() {
@@ -743,8 +858,7 @@ function saveProject() {
 function deleteProject(id) {
   if (!confirm('Sigur vrei să ștergi?')) return;
   const item = data.projects.find(x => x.id === id);
-  data.projects = data.projects.filter(x => x.id !== id);
-  saveLocal(); renderProjects();
+  data.projects = data.projects.filter(x => x.id !== id); saveLocal(); renderProjects();
   if (item) broadcastUpdate('projects', 'delete', item);
 }
 
@@ -754,15 +868,10 @@ function escA(s) { return (s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;')
 function fd(d) { if (!d) return ''; return new Date(d).toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' }); }
 
 // Init
-renderGoals();
-renderProjects();
+renderGoals(); renderProjects();
 
-// Auto-reconnect to last room
 const lastRoom = localStorage.getItem('stardc_room');
-if (lastRoom) {
-  document.getElementById('room-input').value = lastRoom;
-  document.getElementById('my-room-code').textContent = lastRoom;
-}
+if (lastRoom) { document.getElementById('room-input').value = lastRoom; document.getElementById('my-room-code').textContent = lastRoom; }
 
 document.getElementById('project-modal').addEventListener('click', function(e) { if (e.target === this) closeProjectModal(); });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
